@@ -33,22 +33,29 @@ public class Target : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     // 마우스 커서가 마우스를 누르거나(Down) 풀 때(Up)를 감지하는 유니티 내장 함수
     private void OnMouseDown()
     {
-        Destroy(gameObject);
-        // 파괴된 해당 위치에 파티클을 생성해서 보여주도록 합니다.
-        Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
-        gameManager.UpdateScore(pointValue);
+        if (gameManager.isGameActive)
+        {
+            Destroy(gameObject);
+            // 파괴된 해당 위치에 파티클을 생성해서 보여주도록 합니다.
+            Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+            gameManager.UpdateScore(pointValue);
+        }
     }
 
     // 오브젝트 자동 파괴 함수
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+        if (!gameObject.CompareTag("Bad"))
+        {
+            gameManager.GameOver();
+        }
     }
 
     Vector3 RandomForce()
