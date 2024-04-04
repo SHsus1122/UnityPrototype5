@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI gameOverText;
     public bool isGameActive;           // 게임 플레이 상태 가능 여부 판단 변수
     public Button restartButton;        // 게임 재시작 버튼
+    public GameObject titleScreen;      // 게임 시작 타이틀 화면
 
     private int score;
     private float spawnRate = 1.0f;     // 랜덤 스폰 주기
@@ -19,11 +20,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isGameActive = true;
-        score = 0;
-
-        StartCoroutine(SpawnTarget());
-        UpdateScore(0);
+        
     }
 
     // Update is called once per frame
@@ -62,5 +59,17 @@ public class GameManager : MonoBehaviour
         // 현재 사용중인 씬을 다시 로드하는 코드입니다.
         // SceneManager.GetActiveScene() 으로 현재 사용중인 씬을 인식하고 .name 로 해다 씬의 이름을 가져옵니다.
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void StartGame(int difficulty)
+    {
+        isGameActive = true;
+        score = 0;
+        spawnRate /= difficulty;    // 스폰 시간을 전달받은 인자에서 나눔으로 인해 난이다 조절하는 방식
+
+        StartCoroutine(SpawnTarget());
+        UpdateScore(0);
+
+        titleScreen.gameObject.SetActive(false);
     }
 }
